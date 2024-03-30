@@ -21,6 +21,9 @@ pub struct Terminal {
 }
 
 impl Terminal {
+    /// # Errors
+    ///
+    /// May return an `Err`
     pub fn default() -> Result<Self, std::io::Error> {
         let size = termion::terminal_size()?;
         Ok(Self {
@@ -32,6 +35,7 @@ impl Terminal {
         })
     }
 
+    #[must_use]
     pub fn size(&self) -> &Size {
         &self.size
     }
@@ -40,13 +44,19 @@ impl Terminal {
         print!("{}", termion::clear::All);
     }
 
+    #[allow(clippy::cast_possible_truncation)]
     pub fn cursor_position(position: &Position) {
         let Position { x, y } = position;
         let x = x.saturating_add(1) as u16;
         let y = y.saturating_add(1) as u16;
+        // let y = u16::try_from(y.saturating_add(1));
         print!("{}", termion::cursor::Goto(x, y));
     }
 
+    /// # Errors
+    ///
+    /// It is considered an error if not all bytes could be
+    /// written due to I/O errors or EOF being reached
     pub fn flush() -> Result<(), std::io::Error> {
         io::stdout().flush()
     }
@@ -64,8 +74,7 @@ impl Terminal {
     }
 
     pub fn set_bg_color(color: color::Rgb) {
-        let _color = color;
-        // print!("{}", color::Bg(color));
+        let _ = color;
         print!("{}", termion::style::Invert);
     }
 
@@ -82,6 +91,9 @@ impl Terminal {
         print!("{}", color::Fg(color::Reset));
     }
 
+    /// # Errors
+    ///
+    /// Will return `Err` if an issue is found
     pub fn read_key() -> Result<Key, std::io::Error> {
         loop {
             if let Some(key) = io::stdin().lock().keys().next() {

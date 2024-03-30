@@ -7,7 +7,7 @@ pub struct Row {
 }
 
 impl Row {
-    pub fn render(&self, start: usize, end: usize) -> String {
+    #[must_use] pub fn render(&self, start: usize, end: usize) -> String {
         let end = cmp::min(end, self.string.len());
         let start = cmp::min(start, end);
         // self.string.get(start..end).unwrap_or_default().to_string()
@@ -18,7 +18,7 @@ impl Row {
             .take(end - start)
         {
             if grapheme == "\r" {
-                result.push_str(" ");
+                result.push(' ');
             } else {
                 result.push_str(grapheme);
             }
@@ -26,11 +26,11 @@ impl Row {
         result
     }
 
-    pub fn len(&self) -> usize {
+    #[must_use] pub fn len(&self) -> usize {
         self.len
     }
 
-    pub fn is_empty(&self) -> bool {
+    #[must_use] pub fn is_empty(&self) -> bool {
         self.len == 0
     }
 

@@ -9,6 +9,9 @@ pub struct Document {
 }
 
 impl Document {
+    /// # Errors
+    ///
+    /// May return an `Err`
     pub fn open(filename: &str) -> Result<Self, std::io::Error> {
         let contents = fs::read_to_string(filename)?;
         let mut rows = Vec::new();
@@ -21,14 +24,17 @@ impl Document {
         })
     }
 
+    #[must_use]
     pub fn row(&self, index: usize) -> Option<&Row> {
         self.rows.get(index)
     }
 
+    #[must_use]
     pub fn is_empty(&self) -> bool {
         self.rows.is_empty()
     }
 
+    #[must_use]
     pub fn len(&self) -> usize {
         self.rows.len()
     }

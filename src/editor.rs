@@ -161,9 +161,9 @@ impl Editor {
             if let Some(row) = self.document.row(terminal_row as usize + self.offset.y) {
                 self.draw_row(row);
             } else if self.document.is_empty() && terminal_row == height / 3 {
-                self.draw_welcome_message()
+                self.draw_welcome_message();
             } else {
-                println!("~\r")
+                println!("~\r");
             };
         }
     }
@@ -248,7 +248,7 @@ impl Editor {
             }
             Key::PageDown => {
                 y = if y.saturating_add(terminal_height) < height {
-                    y + terminal_height as usize
+                    y + terminal_height
                 } else {
                     height
                 }
