@@ -47,7 +47,9 @@ impl Terminal {
     #[allow(clippy::cast_possible_truncation)]
     pub fn cursor_position(position: &Position) {
         let Position { x, y } = position;
+        #[allow(clippy::cast_possible_truncation)]
         let x = x.saturating_add(1) as u16;
+        #[allow(clippy::cast_possible_truncation)]
         let y = y.saturating_add(1) as u16;
         // let y = u16::try_from(y.saturating_add(1));
         print!("{}", termion::cursor::Goto(x, y));
